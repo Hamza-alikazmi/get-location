@@ -1,9 +1,8 @@
-// server.js
-import express from "express";
-import { MongoClient } from "mongodb";
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
+// server.js (CommonJS)
+const express = require("express");
+const { MongoClient } = require("mongodb");
+const dotenv = require("dotenv");
+const path = require("path");
 
 dotenv.config();
 
@@ -34,15 +33,12 @@ let db, collection;
 
 // ---------- Middleware ----------
 app.use(express.json());
-app.use(express.static("pages")); // serve static files from pages/
+app.use(express.static(path.join(__dirname, "pages"))); // serve static files from pages/
 
 // ---------- Helper: serve HTML ----------
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 function servePage(pageName) {
   return (req, res) => {
-    res.sendFile(resolve(__dirname, "pages", pageName));
+    res.sendFile(path.resolve(__dirname, "pages", pageName));
   };
 }
 
@@ -93,10 +89,6 @@ app.use((req, res) => {
   res.status(404).send("Not found");
 });
 
-// ---------- Local start ----------
-
+// ---------- Start server ----------
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-            
 
-
-// ---------- Vercel adapter ----------
