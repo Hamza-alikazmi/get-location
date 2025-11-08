@@ -94,9 +94,9 @@ app.use((req, res) => {
 });
 
 // ---------- Local start ----------
-const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
             
-}
+
 
 // ---------- Vercel adapter ----------
