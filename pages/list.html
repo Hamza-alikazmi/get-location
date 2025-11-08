@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Locations</title>
+  <style>
+    body{font-family:sans-serif;padding:2rem;background:#f8f9fa}
+    ul{list-style:none;padding:0}
+    li{background:#fff;margin:8px 0;padding:12px;border-radius:8px;box-shadow:0 1px 5px rgba(0,0,0,.1)}
+    button{padding:8px 16px;background:#0070f3;color:#fff;border:none;border-radius:6px}
+  </style>
+</head>
+<body>
+  <h1>All Locations</h1>
+  <button onclick="load()">Refresh</button>
+  <p><a href="/">Back</a> | <a href="/about">About</a></p>
+  <ul id="list"></ul>
+
+  <script>
+    async function load(){
+      const ul=document.getElementById('list');
+      ul.innerHTML='<li>Loading…</li>';
+      try{
+        const r=await fetch('/api/data');
+        const data=await r.json();
+        if(!data.length) return ul.innerHTML='<li>None yet.</li>';
+        ul.innerHTML=data.map(l=>`
+          <li>
+            <strong>IP:</strong> ${l.ip}<br>
+            <strong>Lat/Lng:</strong> ${l.lat}, ${l.long}<br>
+            <small>${new Date(l.time).toLocaleString()}</small>
+          </li>`).join('');
+      }catch(e){ul.innerHTML='<li>Error</li>';}
+    }
+    load();
+  </script>
+</body>
+</html> 

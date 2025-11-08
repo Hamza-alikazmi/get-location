@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Send Location</title>
+  <style>
+    body{font-family:sans-serif;padding:2rem;background:#f0f8ff}
+    button{padding:12px 24px;font-size:16px;background:#0070f3;color:#fff;border:none;border-radius:8px}
+    #status{margin:15px 0;font-weight:bold}
+  </style>
+</head>
+<body>
+  <h1>Send My Location</h1>
+  <button onclick="send()">Send</button>
+  <div id="status"></div>
+  <p><a href="/list">View List</a> | <a href="/about">About</a></p>
+
+  <script>
+    async function send(){
+      const s = document.getElementById('status');
+      s.textContent='Getting…';
+      if(!navigator.geolocation) return s.textContent='Not supported';
+
+      navigator.geolocation.getCurrentPosition(async pos=>{
+        const {latitude:lat, longitude:long}=pos.coords;
+        const r = await fetch('/api/save',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({lat,long})
+        });
+        const d = await r.json();
+        s.textContent = d.message||d.error;
+      },err=>s.textContent='Error: '+err.message);
+    }
+  </script>
+</body>
+</html> 
