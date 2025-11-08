@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "store.js",
+  "type": "commonjs",
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
